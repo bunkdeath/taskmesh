@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "taskmesh"
+version = "0.0.1"
+description = "TaskMesh is a cloud-agnostic task processing framework starting with Google Cloud Pub/Sub."
+authors = [
+    { name = "Amrit K. Chhetri", email = "kshetriamrit@gmail.com" }
+]
+license = { text = "GNU" }
+readme = "README.md"
+keywords = ["task queue", "pubsub", "cloud", "distributed processing"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "google-cloud-pubsub>=2.17.0",
+]
+
+[project.optional-dependencies]
+aws = ["boto3>=1.28.0"]
+azure = ["azure-servicebus>=7.9.0"]
+dev = ["pytest", "black", "flake8", "mypy", "pre-commit"]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/taskmesh"
+Documentation = "https://github.com/yourusername/taskmesh/wiki"
+Source = "https://github.com/yourusername/taskmesh"
+Issues = "https://github.com/yourusername/taskmesh/issues"
+
+[tool.setuptools.packages.find]
+where = ["taskmesh"]
+
+[tool.black]
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311"]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["taskmesh"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.bumpversion]
+current_version = "0.1.0"
+commit = true
+tag = true
+files = ["pyproject.toml", "taskmesh/__init__.py"]
