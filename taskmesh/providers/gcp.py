@@ -1,4 +1,6 @@
 import json
+import os
+import time
 
 from google.cloud import pubsub_v1
 
@@ -40,6 +42,9 @@ class GCPProvider(Provider):
             The project id
         """
         self.credential_file = credential_file
+        if not credential_file:
+            self.credential_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
         self.project_id = project_id
 
         if self.credential_file:
@@ -75,3 +80,52 @@ class GCPProvider(Provider):
     def run(self, topic, func, config):
         self.set_topic_id(topic)
         return BackgroundTask(provider=self, callback=func, conf=config)
+
+
+class Subscriber:
+    def __init__(
+        self,
+        provider: GCPProvider,
+        config: Config = None,
+        subscription_name: str = None,
+    ):
+        """Initialize the Pub/Sub Subscriber with explicit credentials."""
+        self.config = config or Config()
+        self.provider = provider
+        self.project_id = provider.project_id
+        self.credentials_path = provider.credential_file
+        self.subscription_name = (
+            subscription_name if subscription_name else f"{provider.topic_id}-sub"
+        )
+        self.subscriber = pubsub_v1.SubscriberClient.from_service_account_file(
+            self.credentials_path
+        )
+        self.subscription_path = self.subscriber.subscription_path(
+            self.project_id, self.subscription_name
+        )
+
+    def callback(self, message: pubsub_v1.subscriber.message.Message):
+        """Process received message and acknowledge it."""
+        try:
+            data = json.loads(message.data.decode("utf-8"))
+            print(f"Received message: {data}")
+            process_task(data)
+            message.ack()  # Acknowledge message after processing
+        except Exception as e:
+            print(f"Failed to process message: {e}")
+        finally:
+            if self.config.ack_message_on_error:
+                message.ack()
+
+    def start_listening(self):
+        """Start listening for messages on the subscription."""
+        print(f"Listening for messages on {self.subscription_path}...")
+        streaming_pull_future = self.subscriber.subscribe(
+            self.subscription_path, callback=self.callback
+        )
+
+        try:
+            streaming_pull_future.result()  # Keep the process alive
+        except KeyboardInterrupt:
+            streaming_pull_future.cancel()
+            print("Subscriber stopped.")

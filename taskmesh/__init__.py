@@ -1,4 +1,5 @@
 from taskmesh.config import Config
+from taskmesh.core import process_task
 from taskmesh.providers import Provider
 
 
@@ -8,18 +9,21 @@ class Task:
         self.config = config or Config()
 
     def listen(self, topic=None):
-        print(self, topic)
-
-        # def decorator(*args, **kwargs):
         def decorator(func, *args, **kwargs):
             return self.provider.run(topic, func, config=self.config)
 
         return decorator
 
+    def delay(self, *args, **kwargs):
+        message = {
+            "module": self.callback.__module__,
+            "function": self.callback.__name__,
+            "topic": self.provider.topic_id,
+            "args": args,
+            "kwargs": kwargs,
+        }
 
-# class Subscriber:
-#     def listen(self, topic):
-#         def decorator(func):
-#             return run(topic, func, config=self.config)
+        if not self.config.TASK_ENABLED:
+            return process_task(message)
 
-#         return decorator
+        self.provider.publish_message(message)
