@@ -43,9 +43,78 @@ Issues = "https://github.com/bunkdeath/taskmesh/issues"
 packages = ["taskmesh", "taskmesh.providers", "taskmesh.providers.aws", "taskmesh.providers.gcp"]
 
 
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+src = ["."]
+lint.select = [
+  "B",    # https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
+  "BLE",  # https://docs.astral.sh/ruff/rules/#flake8-blind-except-ble
+  "C90",  # https://docs.astral.sh/ruff/rules/#mccabe-c90
+  "COM",  # https://docs.astral.sh/ruff/rules/#flake8-commas-com
+  "E",    # https://docs.astral.sh/ruff/rules/#error-e
+  "EXE",  # https://docs.astral.sh/ruff/rules/#flake8-executable-exe
+  "F",    # https://docs.astral.sh/ruff/rules/#pyflakes-f
+  "FLY",  # https://docs.astral.sh/ruff/rules/#flynt-fly
+  "I",    # https://docs.astral.sh/ruff/rules/#isort-i
+  "INP",  # https://docs.astral.sh/ruff/rules/#flake8-no-pep420-inp
+  "ISC",  # https://docs.astral.sh/ruff/rules/#flake8-implicit-str-concat-isc
+  "PGH",  # https://docs.astral.sh/ruff/rules/#pygrep-hooks-pgh
+  "Q",    # https://docs.astral.sh/ruff/rules/#flake8-quotes-q
+  "RSE",  # https://docs.astral.sh/ruff/rules/#flake8-raise-rse
+  "RUF",  # https://docs.astral.sh/ruff/rules/#ruff-specific-rules-ruf
+  "SLF",  # https://docs.astral.sh/ruff/rules/#flake8-self-slf
+  "SLOT", # https://docs.astral.sh/ruff/rules/#flake8-slots-slot
+  "T10",  # https://docs.astral.sh/ruff/rules/#flake8-debugger-t10
+  "T20",  # https://docs.astral.sh/ruff/rules/#flake8-print-t20
+  "T20",  # https://docs.astral.sh/ruff/rules/#flake8-print-t20
+  "TID",  # https://docs.astral.sh/ruff/rules/#flake8-tidy-imports-tid
+  "TRY",  # https://docs.astral.sh/ruff/rules/#tryceratops-try
+  "YTT",  # https://docs.astral.sh/ruff/rules/#flake8-2020-ytt
+  "F401",
+]
+lint.ignore = [
+  "B006",   # Do not use mutable data structures for argument defaults
+  "B007",   # loop control variable not used within loop body
+  "B008",   # Do not perform function call in argument defaults
+  "B017",   # `assertRaises(Exception)` should be considered evil
+  "B019",   # Use of `functools.lru_cache` or `functools.cache` on methods can lead to memory leaks
+  "B904",   # Within an `except` clause, raise exceptions with `raise ... from err`
+  "BLE001", # Do not catch blind exception: `Exception`
+  "F841",   # Local variable is assigned to but never used
+  "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
+  "RUF013", # PEP 484 prohibits implicit `Optional`
+  "SLF001", # Private member accessed
+  "TRY002", # Create your own exception
+  "TRY003", # Avoid specifying long messages outside the exception class
+  "TRY300", # Consider moving this statement to an `else` block
+  "TRY301", # Abstract `raise` to an inner function
+  "TRY400", # Use `logging.exception` instead of `logging.error`
+  "TRY401", # Redundant exception object included in `logging.exception` call
+  # ruff formatter recommends to disable those
+  "COM812",
+  "COM819",
+  "D206",
+  "D300",
+  "E111",
+  "E114",
+  "E117",
+  "ISC001",
+  "ISC002",
+  "Q000",
+  "Q001",
+  "Q002",
+  "Q003",
+  "T201",
+  "W191",
+]
+
 [tool.black]
-line-length = 88
+line-length = 100
 target-version = ["py38", "py39", "py310", "py311"]
+
+[tool.flake8]
+line-length = 100
 
 [tool.isort]
 profile = "black"

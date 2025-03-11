@@ -1,6 +1,5 @@
 import json
 import os
-import time
 
 from google.cloud import pubsub_v1
 
@@ -32,9 +31,7 @@ class GCPProvider(Provider):
 
     def set_credential_file(self, credential_file):
         self.credential_file = credential_file
-        self.publisher = pubsub_v1.PublisherClient.from_service_account_file(
-            self.credential_file
-        )
+        self.publisher = pubsub_v1.PublisherClient.from_service_account_file(self.credential_file)
 
     def set_project_id(self, project_id):
         self.project_id = project_id
