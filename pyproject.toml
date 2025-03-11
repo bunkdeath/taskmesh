@@ -10,8 +10,8 @@ authors = [
     { name = "Amrit K. Chhetri", email = "kshetriamrit@gmail.com" }
 ]
 license = { text = "GNU" }
-readme = "README.md"
-keywords = ["task queue", "pubsub", "cloud", "distributed processing"]
+readme = "README.MD"
+keywords = ["task queue", "pubsub", "sqs", "gcp", "aws", "cloud", "distributed processing"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -25,22 +25,23 @@ classifiers = [
 ]
 
 dependencies = [
-    "google-cloud-pubsub>=2.17.0",
+    "boto3==1.37.9",
+    "google-cloud-pubsub==2.28.0",
+    "python-dotenv==1.0.1",
 ]
 
 [project.optional-dependencies]
-aws = ["boto3>=1.28.0"]
-azure = ["azure-servicebus>=7.9.0"]
 dev = ["pytest", "black", "flake8", "mypy", "pre-commit"]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/taskmesh"
-Documentation = "https://github.com/yourusername/taskmesh/wiki"
-Source = "https://github.com/yourusername/taskmesh"
-Issues = "https://github.com/yourusername/taskmesh/issues"
+Homepage = "https://github.com/bunkdeath/taskmesh"
+Documentation = "https://github.com/bunkdeath/taskmesh/wiki"
+Source = "https://github.com/bunkdeath/taskmesh"
+Issues = "https://github.com/bunkdeath/taskmesh/issues"
 
-[tool.setuptools.packages.find]
-where = ["taskmesh"]
+[tool.setuptools]
+packages = ["taskmesh", "taskmesh.providers", "taskmesh.providers.aws", "taskmesh.providers.gcp"]
+
 
 [tool.black]
 line-length = 88
@@ -63,7 +64,7 @@ source = ["taskmesh"]
 show_missing = true
 
 [tool.bumpversion]
-current_version = "0.1.0"
+current_version = "0.0.1"
 commit = true
 tag = true
 files = ["pyproject.toml", "taskmesh/__init__.py"]
